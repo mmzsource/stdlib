@@ -2,6 +2,34 @@
 
 
 ;;;;;;;;;;;;;;;;
+;; COMPLEMENT ;;
+;;;;;;;;;;;;;;;;
+
+
+;; takes a function f and returns a new function wrapping f to produce its
+;; complement: (not (f))
+(def not-empty? (complement empty?))
+(not-empty? [])
+(not-empty? [1 2 3])
+
+;; My implementation
+(defn complement* [f]
+  (fn [& args] (not (apply f args))))
+
+;; Use it for instance when filtering a collection with the complement of a pred
+(filter (complement zero?) [0 1 2 3 0 4 5 6])
+;; compare with:
+(filter #(not (zero? %)) [0 1 2 3 0 4 5 6])
+;; or compare with:
+(filter (fn [nr] (not (zero? nr))) [0 1 2 3 0 4 5 6])
+
+;; Used in the standard lib for implementing remove (which is the complement of filter)
+(defn remove* [pred coll]
+  (filter (complement pred) coll))
+(remove* neg? [1 2 -3 4 -5 6])
+
+
+;;;;;;;;;;;;;;;;
 ;; CONSTANTLY ;;
 ;;;;;;;;;;;;;;;;
 
