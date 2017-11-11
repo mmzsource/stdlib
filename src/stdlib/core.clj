@@ -95,6 +95,33 @@
 (group-by identity "abraacadaabra")
 
 
+;;;;;;;;;;;;;
+;; PARTIAL ;;
+;;;;;;;;;;;;;
+
+
+;; Partial application of a function
+;; Also called currying in some languages
+;; Partial is 'positional' and captures arguments starting from the left
+(def one-over (partial / 1))
+(one-over 5)
+
+(def incrementer (partial + 1))
+(incrementer 2 3)
+
+;; My implementation
+(defn partial* [f & xs]
+  (fn [& ys]
+    (apply f (concat xs ys))))
+
+;; Used when you know the value of the first argument(s) to a function
+(map (partial / 1) [1 2 3 4 5 6])
+
+;; Supercool usage example on clojuredocs:
+(def to-english (partial clojure.pprint/cl-format nil "~@(~@[~R~]~^ ~A.~)"))
+(to-english 1234567890)
+
+
 ;;;;;;;;;;;;;;;;;
 ;; WITH-REDEFS ;;
 ;;;;;;;;;;;;;;;;;
