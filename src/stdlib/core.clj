@@ -61,6 +61,45 @@
   (= "simple" (some-hard-to-setup-library-fn "with" "complex" "params")))
 
 
+;;;;;;;;;;
+;; FNIL ;;
+;;;;;;;;;;
+
+
+;; Decorates another function:
+;; replaces first argument(s) which have value `nil` with a default value
+(def inc* (fnil inc 0))
+(inc nil)
+(inc* nil)
+
+(def plus (fnil + 0 0 0))
+(+ 2 3 nil 4)
+(plus 2 3 nil 4)
+
+;; My (one default arg) implementation
+(defn fnil* [f default]
+  (fn [x & xs]
+    (if (nil? x)
+      (apply f default xs)
+      (apply f x xs))))
+
+;; Use it to handle a nil value coming from some input form:
+(defn say-hello [name] (str "Hello " name))
+(def say-hello+ (fnil say-hello "World"))
+(say-hello+ nil)
+
+;; Use it for specifying a default value when updating maps
+;; for instance for a map containing counters of keys:
+(update-in {:a 1} [:a] inc)
+(update-in {:a 2} [:b] (fnil inc 0))
+
+;; Use it to overwrite unwanted default nil behaviour
+;; for instance `conj` with nil produces a list:
+(conj nil 1)
+;; but I want it to be a vector:
+((fnil conj []) nil 1)
+
+
 ;;;;;;;;;;;;;;
 ;; IDENTITY ;;
 ;;;;;;;;;;;;;;
@@ -114,7 +153,7 @@
   (fn [& ys]
     (apply f (concat xs ys))))
 
-;; Used when you know the value of the first argument(s) to a function
+;; Use it when you know the value of the first argument(s) to a function
 (map (partial / 1) [1 2 3 4 5 6])
 
 ;; Supercool usage example on clojuredocs:
