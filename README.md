@@ -1,36 +1,36 @@
 # stdlib
 
-FIXME: description
+Playing around with functions from the clojure standard library to improve my
+clojure programs and increase my speed of development.
 
 ## Installation
 
-Download from http://example.com/FIXME.
+- JVM installed
+- Leiningen installed
 
 ## Usage
 
-FIXME: explanation
+Meant to be used with an interactive repl. Send the examples to an interactive
+REPL and play with them to increase / refresh understanding and knowledge of a
+function.
 
-    $ java -jar stdlib-0.1.0-standalone.jar [args]
+Also possible: read the examples (on github or in your IDE) which are mainly in
+the core.clj file.
 
-## Options
+## Main things I learned
 
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+- using `comp` to travel a path in a map `(comp :c :b :a)`
+- using `comp` in a filter to combine functions 'on the fly'
+- using `complement` in a filter `(filter (complement zero?) [0 1 2])`
+- using `constantly` to provide a value when a function is requested
+- using `constantly` to produce the same value x times
+- using `constantly` as a stub together with `with-redefs`
+- using `fnil` to handle nil values coming from some external input
+- using `fnil` when updating maps with keys that don't yet exist
+- using `fnil` to overwrite unwanted default nil behaviour
+- using `identity` to filter 'logically false' elements (`nil` or `false`)
+- using `identity` to transform a map or vec into a sequence
 
 ## License
 
-Copyright © 2017 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Use the code the way you want it at your own risk. It is not copyrighted.
