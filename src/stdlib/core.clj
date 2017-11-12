@@ -1,6 +1,37 @@
 (ns stdlib.core)
 
 
+;;;;;;;;;;
+;; COMP ;;
+;;;;;;;;;;
+
+
+;; Function COMPosition
+;; Produces a function which is the composition of the given functions
+(filter (comp not zero?) [0 1 0 2 0 3 0 4])
+((comp str +) 8 8 8)
+((comp :c :b :a) {:a {:b {:c "leaf"}}})
+
+;; My implementation (for only 2 functions)
+(defn comp* [f g]
+  (fn [& args] (f (apply g args))))
+
+;; Use it to travel a path in a map. So:
+((comp :c :b :a) {:a {:b {:c "leaf"}}})
+;; instead of
+(:c (:b (:a {:a {:b {:c "leaf"}}})))
+
+;; Use it to combine any 2 functions
+((comp - /) 1 2)
+
+;; Use it in a filter
+(filter (comp not nil?) [1 nil 2 nil 3 nil nil])
+
+;; Or more sophisticated:
+(def countif (comp count filter))
+(countif even? [1 2 3 4 5])
+
+
 ;;;;;;;;;;;;;;;;
 ;; COMPLEMENT ;;
 ;;;;;;;;;;;;;;;;
