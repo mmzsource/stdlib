@@ -30,6 +30,9 @@
 ;; Or more sophisticated:
 (def countif (comp count filter))
 (countif even? [1 2 3 4 5])
+;; Or:
+(def count-if-even (comp count (partial filter even?)))
+(count-if-even [1 2 3 4 5])
 
 
 ;;;;;;;;;;;;;;;;
