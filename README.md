@@ -30,6 +30,12 @@ the core.clj file.
 - using `fnil` to overwrite unwanted default nil behaviour
 - using `identity` to filter 'logically false' elements (`nil` or `false`)
 - using `identity` to transform a map or vec into a sequence
+- using `juxt` to easily create a map out of a sequence of values
+- using `juxt` to maintain an unaltered version of a value along with its
+  transformations
+- using `juxt` for sorting on multiple criteria
+- using `juxt` to easily create lookup maps
+- using `juxt` to calculate stats on a sequence of numbers in one go
 
 ## License
 

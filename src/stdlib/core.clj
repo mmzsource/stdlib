@@ -168,6 +168,74 @@
 (group-by identity "abraacadaabra")
 
 
+;;;;;;;;;;
+;; JUXT ;;
+;;;;;;;;;;
+
+;; Apply multiple functions (left-to-right) to the args
+;; ((juxt a b c) x) => [(a x) (b x) (c x)]
+((juxt :a :c) {:a "A" :b "B" :c "C"})
+
+;; My implementation (only for '1 arg' function)
+(defn juxt* [& fs]
+  (fn [x] (mapv (fn [f] (f x)) fs)))
+
+;; Use it to easily pull out elements from a sequence:
+((juxt first second last) (range 10))
+
+;; Or pull values from a map:
+((juxt :first :last) {:first "Maarten" :last "Metz" :email "bla" :etc "etc"})
+
+;; Use it to setup a map easily
+;; First function arg will create the keys, second will create the values
+(into {} (map (juxt identity str) (range 10)))
+
+;; Expanding on the previous example, in general, with juxt you can maintain
+;; an unaltered version of a value along with its transformations:
+(def words ["The" "Clojure" "Standard" "Library" "is" "amazing"])
+(map (juxt identity count) words)
+
+;; Very elegant solution I found in The Clojure Standard Lib book for finding
+;; neighbours in a 2D grid:
+(def dim #{0 1 2 3 4});
+
+(defn up    [[x y]] [x (dec y)])
+(defn down  [[x y]] [x (inc y)])
+(defn left  [[x y]] [(dec x) y])
+(defn right [[x y]] [(inc x) y])
+
+(defn valid? [[x y]]
+  (and (contains? dim x)
+       (contains? dim y)))
+
+(defn neighbours [cell]
+  (filter valid?
+          ((juxt up down left right) cell)))
+
+(neighbours [2 1])
+(neighbours [0 0])
+
+;; You can also use juxt for sorting on multiple criteria
+(sort-by count ["ah" "this" "is" "super" "awesome"])
+(sort-by str   ["ah" "this" "is" "super" "awesome"])
+(sort-by (juxt count str) ["ah" "this" "is" "super" "awesome"])
+(sort-by (juxt :a :b) [{:a 1 :b 3} {:a 1 :b 2} {:a 2 :b 1}])
+
+;; Use it to create lookup maps
+(def seq-to-index [{:id 1 :name "one"} {:id 2 :name "two"} {:id 3 :name "three"}])
+(defn index-by [keyname coll]
+  (into {} (map (juxt keyname identity) coll)))
+(index-by :id   seq-to-index)
+(index-by :name seq-to-index)
+
+;; Use it to calculate 'stats' on a sequence in one go:
+((juxt + * min max) 3 5 7)
+
+;; Use it to segregate values in a collection
+((juxt (partial filter even?) (partial filter odd?)) (range 10))
+
+
+
 ;;;;;;;;;;;;;
 ;; PARTIAL ;;
 ;;;;;;;;;;;;;
@@ -193,6 +261,14 @@
 ;; Supercool usage example on clojuredocs:
 (def to-english (partial clojure.pprint/cl-format nil "~@(~@[~R~]~^ ~A.~)"))
 (to-english 1234567890)
+
+
+;;;;;;;;;;;;;
+;; SORT-BY ;;
+;;;;;;;;;;;;;
+
+
+
 
 
 ;;;;;;;;;;;;;;;;;
