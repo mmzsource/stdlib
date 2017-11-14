@@ -5,6 +5,7 @@
 ;; APPLY ;;
 ;;;;;;;;;;;
 
+
 ;; Apply a function to a sequence of arguments
 (apply + [2 3])
 
@@ -15,12 +16,12 @@
     (f)))
 
 ;; Use it if you have to work with a list of arguments:
-(apply + [1 2 3 4])
+(apply + '(1 2 3 4))
 ;; instead of:
 (+ 1 2 3 4)
 
 ;; Use it to apply an operator to its operands where the operands are in a seq
-(map #(apply max %) [[1 2 3] [4 5 6] [7 8 9]])
+(map #(apply max %)    [[1 2 3] [4 5 6] [7 8 9]])
 (map (partial apply +) [[1 2] [3 4]])
 
 
