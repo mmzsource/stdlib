@@ -1,6 +1,29 @@
 (ns stdlib.core)
 
 
+;;;;;;;;;;;
+;; APPLY ;;
+;;;;;;;;;;;
+
+;; Apply a function to a sequence of arguments
+(apply + [2 3])
+
+;; My implementation
+(defn apply* [f args]
+  (if (seq args)
+    (recur (partial f (first args)) (rest args))
+    (f)))
+
+;; Use it if you have to work with a list of arguments:
+(apply + [1 2 3 4])
+;; instead of:
+(+ 1 2 3 4)
+
+;; Use it to apply an operator to its operands where the operands are in a seq
+(map #(apply max %) [[1 2 3] [4 5 6] [7 8 9]])
+(map (partial apply +) [[1 2] [3 4]])
+
+
 ;;;;;;;;;;
 ;; COMP ;;
 ;;;;;;;;;;
@@ -93,6 +116,22 @@
 (some-hard-to-setup-library-fn :x :& :y)
 (with-redefs [some-hard-to-setup-library-fn (constantly "simple")]
   (= "simple" (some-hard-to-setup-library-fn "with" "complex" "params")))
+
+
+;;;;;;;;;;;;
+;; EVERY? ;;
+;;;;;;;;;;;;
+
+
+;; dna to rna in one method including validation, empty - and nil handling
+(defn to-rna [dna-seq]
+  (let [dna->rna {\C \G \G \C \A \U \T \A}]
+    (assert (every? #(contains? dna->rna %) dna-seq))
+    (apply str (map dna->rna dna-seq))))
+(to-rna "ACGTGGTCTTAA")
+(to-rna "")
+(to-rna nil)
+(to-rna "XYZ")
 
 
 ;;;;;;;;;;
@@ -233,7 +272,6 @@
 
 ;; Use it to segregate values in a collection
 ((juxt (partial filter even?) (partial filter odd?)) (range 10))
-
 
 
 ;;;;;;;;;;;;;
