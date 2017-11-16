@@ -20,7 +20,7 @@
 (count [1 2 3])
 (count {:a 1 :b 2})
 
-;; My implementation
+;; My non tail recursive implementation
 (defn count* [coll]
   (if (empty? coll)
     0
@@ -31,6 +31,16 @@
 (count* {:a 1 :b 2})
 (count* (range 7))
 
+;; My tail recursive implementation
+(defn count** [coll]
+  ((fn [coll acc]
+      (if (empty? coll)
+        acc
+        (recur (rest coll) (inc acc))))
+   coll
+   0))
+
+(count** (range 10))
 
 ;;;;;;;;;
 ;; MAP ;;
