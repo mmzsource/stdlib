@@ -79,6 +79,9 @@
         acc
         (if (pred (first coll))
           (recur pred (rest coll) (conj acc (first coll)))
-          (recur pred (rest coll) acc)))) pred coll []))
+          (recur pred (rest coll) acc))))
+   pred
+   coll
+   []))
 
 (filter*** even? (range 10))
