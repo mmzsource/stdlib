@@ -38,13 +38,25 @@
 
 (map inc [2 3 4])
 
-;; My implementation
+;; My non tail recursion implementation
 (defn map* [f coll]
   (if (empty? coll)
     ()
     (cons (f (first coll)) (map* f (rest coll)))))
 
 (map* inc [1 2 3 4 5 6])
+
+;; My tail recursion solution
+(defn map** [f coll]
+  ((fn [f coll acc]
+      (if (empty? coll)
+        acc
+        (recur f (rest coll) (conj acc (f (first coll))))))
+   f
+   coll
+   []))
+
+(map** inc [1 2 3 4 5 6])
 
 ;;;;;;;;;;;;
 ;; FILTER ;;
