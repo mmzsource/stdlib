@@ -68,6 +68,15 @@
 
 (map** inc [1 2 3 4 5 6])
 
+;; My lazy implementation (lazy and don't consume the stack completely)
+(defn map*** [f coll]
+  (lazy-seq
+    (if (empty? coll)
+      ()
+      (cons (f (first coll)) (map*** f (rest coll))))))
+
+(map*** inc (range 10))
+
 ;;;;;;;;;;;;
 ;; FILTER ;;
 ;;;;;;;;;;;;
@@ -107,3 +116,15 @@
    []))
 
 (filter*** even? (range 10))
+
+;; My lazy filter implementation
+(defn filter**** [pred coll]
+  (lazy-seq
+   (if (empty? coll)
+     ()
+     (if (pred (first coll))
+       (cons (first coll) (filter**** pred (rest coll)))
+       (filter**** pred (rest coll))))))
+
+(set! *print-length* 100)
+(filter**** even? (range))
