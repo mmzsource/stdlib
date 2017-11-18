@@ -87,6 +87,15 @@
 
 (map* inc (range 10))
 
+;; My map implementation, using reduce
+(defn map* [f coll]
+  (reduce
+   (fn [acc v] (conj acc (f v))) ; acc(umulator) and v(alue)
+   []
+   coll))
+
+(map* inc (range 10))
+
 ;;;;;;;;;;;;
 ;; FILTER ;;
 ;;;;;;;;;;;;
@@ -149,3 +158,52 @@
 
 (set! *print-length* 100)
 (filter* even? (range))
+
+;; My filter implementation using reduce
+
+(defn filter* [pred coll]
+  (reduce
+   (fn [acc v]
+     (if (pred v)
+       (conj acc v)
+       acc))
+   []
+   coll))
+
+(filter* even? (range 10))
+
+;;;;;;;;;;;;
+;; REDUCE ;;
+;;;;;;;;;;;;
+
+(reduce + 0 [1 2 3])
+
+;; My reduce implementation (only working for very base case easy scenarios)
+(defn reduce* [f init coll]
+  (loop [coll coll acc init]
+    (if (empty? coll)
+      acc
+      (recur (rest coll) (f acc (first coll))))))
+
+(reduce* + 0 [1 2 3])
+
+;; Implementing map using reduce
+(defn map* [f coll]
+  (reduce
+   (fn [acc v] (conj acc (f v)))
+   []
+   coll))
+
+(map* inc (range 10))
+
+;; Implementing filter using reduce
+(defn filter* [pred coll]
+  (reduce
+   (fn [acc v]
+     (if (pred v)
+       (conj acc v)
+       acc))
+   []
+   coll))
+
+(filter* even? (range 10))
