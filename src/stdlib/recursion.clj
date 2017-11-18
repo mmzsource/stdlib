@@ -32,7 +32,7 @@
 (count* (range 7))
 
 ;; My tail recursive implementation
-(defn count** [coll]
+(defn count* [coll]
   ((fn [coll acc]
       (if (empty? coll)
         acc
@@ -40,7 +40,7 @@
    coll
    0))
 
-(count** (range 10))
+(count* (range 10))
 
 ;;;;;;;;;
 ;; MAP ;;
@@ -57,7 +57,7 @@
 (map* inc [1 2 3 4 5 6])
 
 ;; My tail recursion solution
-(defn map** [f coll]
+(defn map* [f coll]
   ((fn [f coll acc]
       (if (empty? coll)
         acc
@@ -66,16 +66,26 @@
    coll
    []))
 
-(map** inc [1 2 3 4 5 6])
+(map* inc [1 2 3 4 5 6])
+
+;; My cleaned up tail recursive version using loop, and no lambda
+(defn map* [f coll]
+  (loop [coll coll acc []]
+    (if (empty? coll)
+      acc
+      (recur (rest coll) (conj acc (f (first coll)))))))
+
+(map* inc (range 10))
+
 
 ;; My lazy implementation (lazy and don't consume the stack completely)
-(defn map*** [f coll]
+(defn map* [f coll]
   (lazy-seq
     (if (empty? coll)
       ()
       (cons (f (first coll)) (map*** f (rest coll))))))
 
-(map*** inc (range 10))
+(map* inc (range 10))
 
 ;;;;;;;;;;;;
 ;; FILTER ;;
@@ -94,17 +104,17 @@
 (filter* even? (range 10))
 
 ;; Implementation with (partial) tail recursion:
-(defn filter** [pred coll]
+(defn filter* [pred coll]
   (if (empty? coll)
     ()
     (if (pred (first coll))
       (cons (first coll) (filter* pred (rest coll)))
       (recur pred (rest coll)))))
 
-(filter** even? (range 10))
+(filter* even? (range 10))
 
 ;; Implementation with complete tail recursion:
-(defn filter*** [pred coll]
+(defn filter* [pred coll]
   ((fn [pred coll acc]
       (if (empty? coll)
         acc
@@ -115,10 +125,21 @@
    coll
    []))
 
-(filter*** even? (range 10))
+(filter* even? (range 10))
+
+;; My cleaned up tail recursive function, using no lambda
+(defn filter* [pred coll]
+  (loop [coll coll acc []]
+    (if (empty? coll)
+      acc
+      (if (pred (first coll))
+        (recur (rest coll) (conj acc (first coll)))
+        (recur (rest coll) acc)))))
+
+(filter* even? (range 10))
 
 ;; My lazy filter implementation
-(defn filter**** [pred coll]
+(defn filter* [pred coll]
   (lazy-seq
    (if (empty? coll)
      ()
@@ -127,4 +148,4 @@
        (filter**** pred (rest coll))))))
 
 (set! *print-length* 100)
-(filter**** even? (range))
+(filter* even? (range))
