@@ -246,3 +246,30 @@
  (fn [m k v] (assoc m k v))
  {}
  (vec (range 11 100 11)))
+
+
+;;;;;;;;;;;;;;;;
+;; REDUCTIONS ;;
+;;;;;;;;;;;;;;;;
+
+;; Reimplement the key- and value char counter with reduce
+;; Note that the acc(umulator) is destructured into [kcount vcount]
+;; and the v(alue) is destructured into [k v] since it's a map and not a seq.
+(reduce
+ (fn [[kcount vcount] [k v]]
+   [(+ kcount (count k))
+    (+ vcount (count v))])
+ [0 0]
+ {"foo" "food"
+  "bar" "bars"
+  "baz" "bazaar"})
+
+;; Replace reduce with reductions and see the intermediate results:
+(reductions
+ (fn [[kcount vcount] [k v]]
+   [(+ kcount (count k))
+    (+ vcount (count v))])
+ [0 0]
+ {"foo" "food"
+  "bar" "bars"
+  "baz" "bazaar"})
