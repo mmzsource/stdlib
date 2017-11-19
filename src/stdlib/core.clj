@@ -302,11 +302,48 @@
 (to-english 1234567890)
 
 
+;;;;;;;;;;;;;;;
+;; REDUCE-KV ;;
+;;;;;;;;;;;;;;;
+
+
+;; Increment all values of a map with reduce-kv
+(reduce-kv
+ (fn [m k v] (assoc m k (inc v)))
+ {}
+ {:a 1 :b 2})
+
+;; Count all characters in the keys and in the values
+(reduce-kv
+ (fn [[kcount vcount] k v]
+   [(+ kcount (count k))
+    (+ vcount (count v))])
+ [0 0]
+ {"Foo" "Food"
+  "Bar" "Bars"
+  "Baz" "Bazaar"})
+
+;; reduce-kv will call the function you provide with:
+;; 1. The accumulator (a map in the first example, a tuple in the second)
+;; 2. The next key in the map
+;; 3. The accompanying value in the map
+
+;; Reduce-kv with a vector as collection, will call your function with the
+;; index of the vector as key and the value as value:
+(reduce-kv
+ (fn [m k v] (assoc m k v))
+ {}
+ (vec "ClojureRocks"))
+
+(reduce-kv
+ (fn [m k v] (assoc m k v))
+ {}
+ (vec (range 11 100 11)))
+
+
 ;;;;;;;;;;;;;
 ;; SORT-BY ;;
 ;;;;;;;;;;;;;
-
-
 
 
 
