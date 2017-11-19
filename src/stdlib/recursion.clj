@@ -273,3 +273,62 @@
  {"foo" "food"
   "bar" "bars"
   "baz" "bazaar"})
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; AVERAGE using reduce ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn avg [nrs]
+  (/ (reduce + nrs)
+     (count nrs)))
+
+(avg [2 3 4])
+
+;; instead of returning average directly, return numerator and denominator
+;; this makes the result of the work much more composable
+(defn num-denom [nrs]
+  (reduce
+   (fn [[sum count] v]
+     [(+ sum v) (inc count)])
+     [0 0]
+     nrs))
+
+(num-denom [2 3 4 5 6])
+
+(defn plus
+  ([] [0 1])
+  ([avg] avg)
+  ([[n1 d1] [n2 d2]]
+   [(+ n1 n2)
+    (+ d1 d2)]))
+
+(plus [2 4] [1 3])
+(plus [2 4] [0 0])
+
+;; numerator denominator constructor which prevents divide by zero
+(defn make-nd [nr]
+  [nr 1])
+
+(defn num-denom [nrs]
+  (reduce plus [0 0] (map make-nd nrs)))
+
+(num-denom [2 4 6])
+
+
+;;;;;;;;;;;;;
+;; REDUCED ;;
+;;;;;;;;;;;;;
+
+
+;; Use reduced with infinite sequences
+(defn longer-than? [n coll]
+  (> (reduce (fn [result _]
+               (let [result (inc result)]
+                 (if (> result n)
+                   (reduced result)
+                   result)))
+             0 coll)
+     n))
+
+(longer-than? 10 (range))
