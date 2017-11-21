@@ -119,12 +119,51 @@
   (= "simple" (some-hard-to-setup-library-fn "with" "complex" "params")))
 
 
+;;;;;;;;;;;
+;; EMPTY ;;
+;;;;;;;;;;;
+
+
+;; Returns an empty collection of the same type
+(empty '(1 2))
+(empty [1 2])
+(empty {1 2})
+(empty #{1 2})
+(empty (range 10))
+(empty (frequencies [1 1 2 3]))
+
+;; Preserves metadata
+(def fiets (with-meta #{1 2 3} {:some-meta "bel"}))
+(meta fiets)
+(def deur (empty fiets))
+(meta deur)
+
+;; Use it to avoid conditionals to verify the type of a collection
+(defn check-collection-type [coll]
+  (cond
+    (list? coll)   '()
+    (map? coll)     {}
+    (set? coll)    #{}
+    (vector? coll)  []))
+(check-collection-type [1 2 3])
+
+;; Use it when walking collections while preserving type
+;; I'm not going to write a walker here, but this gives the idea:
+(defn map-kv [f coll]
+  (reduce-kv
+   (fn [m k v] (assoc m k (f v)))
+   (empty coll)
+   coll))
+(map-kv inc {:a 2 :b 3 :c 16})
+(map-kv inc [2 3 16])          ;; key is the index of the vector
+
+
 ;;;;;;;;;;;;
 ;; EVERY? ;;
 ;;;;;;;;;;;;
 
 
-;; dna to rna in one method including validation, empty - and nil handling
+;; Dna to rna in one method including validation, empty - and nil handling
 (defn to-rna [dna-seq]
   (let [dna->rna {\C \G \G \C \A \U \T \A}]
     (assert (every? #(contains? dna->rna %) dna-seq))
@@ -133,6 +172,14 @@
 (to-rna "")
 (to-rna nil)
 (to-rna "XYZ")
+
+
+;;;;;;;;;;;;;;;;
+;; EVERY-PRED ;;
+;;;;;;;;;;;;;;;;
+
+
+
 
 
 ;;;;;;;;;;
