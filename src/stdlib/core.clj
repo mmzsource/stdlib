@@ -145,6 +145,7 @@
     (map? coll)     {}
     (set? coll)    #{}
     (vector? coll)  []))
+
 (check-collection-type [1 2 3])
 
 ;; Use it when walking collections while preserving type
@@ -154,6 +155,7 @@
    (fn [m k v] (assoc m k (f v)))
    (empty coll)
    coll))
+
 (map-kv inc {:a 2 :b 3 :c 16})
 (map-kv inc [2 3 16])          ;; key is the index of the vector
 
@@ -163,11 +165,15 @@
 ;;;;;;;;;;;;
 
 
+;; TBD
+
+
 ;; Dna to rna in one method including validation, empty - and nil handling
 (defn to-rna [dna-seq]
   (let [dna->rna {\C \G \G \C \A \U \T \A}]
     (assert (every? #(contains? dna->rna %) dna-seq))
     (apply str (map dna->rna dna-seq))))
+
 (to-rna "ACGTGGTCTTAA")
 (to-rna "")
 (to-rna nil)
@@ -179,7 +185,7 @@
 ;;;;;;;;;;;;;;;;
 
 
-
+;; TBD
 
 
 ;;;;;;;;;;
@@ -259,6 +265,7 @@
 ;; JUXT ;;
 ;;;;;;;;;;
 
+
 ;; Apply multiple functions (left-to-right) to the args
 ;; ((juxt a b c) x) => [(a x) (b x) (c x)]
 ((juxt :a :c) {:a "A" :b "B" :c "C"})
@@ -320,6 +327,7 @@
 
 ;; Use it to segregate values in a collection
 ((juxt (partial filter even?) (partial filter odd?)) (range 10))
+((juxt filter remove) even? (range 10))
 
 
 ;;;;;;;;;;;;;
@@ -393,7 +401,12 @@
 ;;;;;;;;;;;;;
 
 
+;; TBD
+
 
 ;;;;;;;;;;;;;;;;;
 ;; WITH-REDEFS ;;
 ;;;;;;;;;;;;;;;;;
+
+
+;; TBD
