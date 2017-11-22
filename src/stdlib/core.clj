@@ -316,7 +316,10 @@
 (sort-by (juxt :a :b) [{:a 1 :b 3} {:a 1 :b 2} {:a 2 :b 1}])
 
 ;; Use it to create lookup maps
-(def seq-to-index [{:id 1 :name "one"} {:id 2 :name "two"} {:id 3 :name "three"}])
+(into {} (map (juxt :id identity) [{:id 1 :name "fiets"} {:id 2 :name "bel"}]))
+
+(def seq-to-index
+  [{:id 1 :name "one"} {:id 2 :name "two"} {:id 3 :name "three"}])
 (defn index-by [keyname coll]
   (into {} (map (juxt keyname identity) coll)))
 (index-by :id   seq-to-index)
@@ -394,6 +397,16 @@
  (fn [m k v] (assoc m k v))
  {}
  (vec (range 11 100 11)))
+
+;; Use reduce-kv to apply a function to all values of a map
+(defn map-kv [f coll]
+  (reduce-kv
+   (fn [m k v] (assoc m k (f v)))
+   (empty coll)
+   coll))
+
+(map-kv inc {:a 1 :b 2})
+(map-kv inc [1 2 3]) ;; index of vec used as key, value as value
 
 
 ;;;;;;;;;;;;;
