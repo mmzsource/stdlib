@@ -36,6 +36,8 @@ the core.clj file.
 - using `juxt` for sorting on multiple criteria
 - using `juxt` to easily create lookup maps
 - using `juxt` to calculate stats on a sequence of numbers in one go
+- using `juxt` for splitting a seq into 2 seqs: one with the values satisfying
+  a pred and the other with the values that don't
 - using `reduce-kv` to reduce an associative structure (like a map or a vec)
 - using `reductions` to view intermediate results of `reduce`
 
