@@ -19,6 +19,8 @@ the core.clj file.
 
 ## Main things I learned
 
+### functions
+
 - using `comp` to travel a path in a map `(comp :c :b :a)`
 - using `comp` in a filter to combine functions 'on the fly'
 - using `complement` in a filter `(filter (complement zero?) [0 1 2])`
@@ -40,6 +42,19 @@ the core.clj file.
   a pred and the other with the values that don't
 - using `reduce-kv` to reduce an associative structure (like a map or a vec)
 - using `reductions` to view intermediate results of `reduce`
+
+### macros
+
+Clojure 'verbs'
+
+- functions (Defined with `defn`)
+- macros (Defined with `defmacro`)
+- special forms (Cannot be defined by user. Are defined by language. (e.g. def,
+  if, do, let, quote, var, fn, loop, recur, throw, try)
+
+Key difference between function and macros & special forms: all expressions
+within the body are evaluated before the function body is evaluated.
+
 
 ## License
 
