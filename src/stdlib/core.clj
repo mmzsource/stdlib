@@ -333,6 +333,32 @@
 ((juxt filter remove) even? (range 10))
 
 
+;;;;;;;;;;;;
+;; MAPCAT ;;
+;;;;;;;;;;;;
+
+
+;; Use it to apply a function to a collection and concat the resulting seqs
+(mapcat reverse [[3 2 1 0] [6 5 4] [9 8 7]])
+
+;; My implementation
+(defn mapcat* [f coll]
+  (apply concat (map f coll)))
+
+(defn single-double-triple [x] [(* x 1) (* x 2) (* x 3)])
+(map     single-double-triple (range 10))
+(mapcat  single-double-triple (range 10))
+(mapcat* single-double-triple (range 10))
+
+;; Use it to concat seqs and remove empty seqs in one go:
+(map    #(remove even? %) [[1 2] [2 2] [2 3]])
+(mapcat #(remove even? %) [[1 2] [2 2] [2 3]])
+
+;; Use it to duplicate each item in a collection:
+(map    #(repeat 2 %) [1 2])
+(mapcat #(repeat 2 %) [1 2])
+
+
 ;;;;;;;;;;;;;
 ;; PARTIAL ;;
 ;;;;;;;;;;;;;
