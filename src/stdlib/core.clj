@@ -443,6 +443,33 @@
 ;; TBD
 
 
+;;;;;;;;;;;
+;; SWAP! ;;
+;;;;;;;;;;;
+
+;; Used to atomically swap the value of an atom
+
+;; Add something to an atom
+(def list-atom (atom '()))
+(swap! list-atom conj :fiets :bel)
+(deref list-atom)
+
+;; Add a value:
+(def map-atom (atom {:a "A" :b [1 2 3] :c 7}))
+(swap! map-atom assoc :c 5)
+;; increment a value:
+(swap! map-atom update :c inc)
+;; increment multiple values in one map-value:
+(swap! map-atom update :b (partial mapv inc))
+;; increment multiple key-values in one go:
+(defn update-example [m k1 f1 k2 f2 k3 f3]
+  (let [m1 (assoc  m k1 (f1 (get  m k1)))
+        m2 (assoc m1 k2 (f2 (get m1 k2)))]
+    (assoc m2 k3 (f3 (get m2 k3)))))
+(defn str-double [str-to-double]
+  (str str-to-double str-to-double))
+(swap! map-atom update-example :a str-double :b (partial mapv inc) :c dec)
+
 ;;;;;;;;;;;;;;;;;
 ;; WITH-REDEFS ;;
 ;;;;;;;;;;;;;;;;;
