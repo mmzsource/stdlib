@@ -457,18 +457,23 @@
 ;; Add a value:
 (def map-atom (atom {:a "A" :b [1 2 3] :c 7}))
 (swap! map-atom assoc :c 5)
-;; increment a value:
+
+;; Apply a function to a map-value:
 (swap! map-atom update :c inc)
-;; increment multiple values in one map-value:
+
+;; Map a function over a map-value that is a sequence:
 (swap! map-atom update :b (partial mapv inc))
-;; increment multiple key-values in one go:
-(defn update-example [m k1 f1 k2 f2 k3 f3]
-  (let [m1 (assoc  m k1 (f1 (get  m k1)))
-        m2 (assoc m1 k2 (f2 (get m1 k2)))]
-    (assoc m2 k3 (f3 (get m2 k3)))))
-(defn str-double [str-to-double]
-  (str str-to-double str-to-double))
-(swap! map-atom update-example :a str-double :b (partial mapv inc) :c dec)
+
+;; increment multiple key-values in one swap!:
+(defn update-multiple-kvs [m k1 f1 k2 f2 k3 f3]
+  (let [m1 (assoc  m k1 (f1 (k1 m)))
+        m2 (assoc m1 k2 (f2 (k2 m1)))
+        m3 (assoc m2 k3 (f3 (k3 m2)))]
+    m3))
+(defn str-double [str-to-double] (str str-to-double str-to-double))
+(defn inc-vec [v] (mapv inc v))
+
+(swap! map-atom update-multiple-kvs :a str-double :b inc-vec :c dec)
 
 ;;;;;;;;;;;;;;;;;
 ;; WITH-REDEFS ;;
