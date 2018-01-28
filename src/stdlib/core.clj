@@ -119,6 +119,56 @@
   (= "simple" (some-hard-to-setup-library-fn "with" "complex" "params")))
 
 
+;;;;;;;;;
+;; DEF ;;
+;;;;;;;;;
+
+;; Associate names with values
+(def name "some value")
+
+;; Evaluate name
+name
+
+;; Evaluate *the symbol* name
+'name
+
+;; (Quite similar to the evaluation of a keyword):
+:name
+
+;; You can compare symbols
+(= 'name 'some-other-name) ;; also note you can create symbols on-the-fly
+(= 'name :name)
+(= 'name 'name)
+
+;; A var is what binds a symbol to a value
+#'name
+(.get #'name)
+(.-sym #'name)
+
+;; So in a def there are 3 values involved:
+;; 1. the symbol (in this case name - quote it so it won't be evaluated: 'name)
+;; 2. the value  (in this case "some value")
+;; 3. the var    (in this case #'name)
+
+;; define a mutable variable
+(def ^:dynamic *mutable-var* "immutable")
+*mutable-var*
+
+;; within the binding scope mutable-var is changed
+(binding [*mutable-var* "not so immutable"]
+  (str *mutable-var*))
+
+;; now it's the old value again
+*mutable-var*
+
+;; Other mutable vars which enhance the repl experience:
+*print-length*
+*print-level*
+*1
+*2
+*3
+*e
+
 ;;;;;;;;;;;
 ;; EMPTY ;;
 ;;;;;;;;;;;
