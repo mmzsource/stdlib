@@ -124,31 +124,31 @@
 ;;;;;;;;;
 
 ;; Associate names with values
-(def name "some value")
+(def a-name "some value")
 
 ;; Evaluate name
-name
+a-name
 
 ;; Evaluate *the symbol* name
-'name
+'a-name
 
 ;; (Quite similar to the evaluation of a keyword):
-:name
+:a-name
 
 ;; You can compare symbols
-(= 'name 'on-the-fly) ;; also note you can create symbols on-the-fly
-(= 'name :name)
-(= 'name 'name)
+(= 'a-name 'on-the-fly) ;; also note you can create symbols on-the-fly
+(= 'a-name :a-name)
+(= 'a-name 'a-name)
 
 ;; A var is what binds a symbol to a value
-#'name
-(.get #'name)
-(.-sym #'name)
+#'a-name
+(.get #'a-name)
+(.-sym #'a-name)
 
 ;; So in a def there are 3 values involved:
-;; 1. the symbol (here: name - if you quote it it won't be evaluated: 'name)
+;; 1. the symbol (here: a-name - if you quote it it won't be evaluated: 'name)
 ;; 2. the value  (here: "some value")
-;; 3. the var    (here: #'name)
+;; 3. the var    (here: #'a-name)
 
 ;; define a mutable variable
 (def ^:dynamic *mutable-var* "some value")
@@ -414,6 +414,11 @@ name
 (mapcat #(repeat 2 %) [1 2])
 
 
+;;;;;;;;;;;;;;;
+;; NAMESPACE ;;
+;;;;;;;;;;;;;;;
+
+;; A namespace is basically a lookup table of vars (see def) indexed by symbols
 
 
 ;;;;;;;;;;;;;
