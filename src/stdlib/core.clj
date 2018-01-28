@@ -136,7 +136,7 @@ name
 :name
 
 ;; You can compare symbols
-(= 'name 'some-other-name) ;; also note you can create symbols on-the-fly
+(= 'name 'on-the-fly) ;; also note you can create symbols on-the-fly
 (= 'name :name)
 (= 'name 'name)
 
@@ -146,16 +146,16 @@ name
 (.-sym #'name)
 
 ;; So in a def there are 3 values involved:
-;; 1. the symbol (in this case name - quote it so it won't be evaluated: 'name)
-;; 2. the value  (in this case "some value")
-;; 3. the var    (in this case #'name)
+;; 1. the symbol (here: name - if you quote it it won't be evaluated: 'name)
+;; 2. the value  (here: "some value")
+;; 3. the var    (here: #'name)
 
 ;; define a mutable variable
-(def ^:dynamic *mutable-var* "immutable")
+(def ^:dynamic *mutable-var* "some value")
 *mutable-var*
 
 ;; within the binding scope mutable-var is changed
-(binding [*mutable-var* "not so immutable"]
+(binding [*mutable-var* "some completely other value"]
   (str *mutable-var*))
 
 ;; now it's the old value again
@@ -168,6 +168,11 @@ name
 *2
 *3
 *e
+
+;; You can also associate a function to a name:
+(def double (fn [x] (* 2 x)))
+(double 4)
+
 
 ;;;;;;;;;;;
 ;; EMPTY ;;
@@ -407,6 +412,8 @@ name
 ;; Use it to duplicate each item in a collection:
 (map    #(repeat 2 %) [1 2])
 (mapcat #(repeat 2 %) [1 2])
+
+
 
 
 ;;;;;;;;;;;;;
