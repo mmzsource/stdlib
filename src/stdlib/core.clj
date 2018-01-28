@@ -418,7 +418,38 @@ a-name
 ;; NAMESPACE ;;
 ;;;;;;;;;;;;;;;
 
-;; A namespace is basically a lookup table of vars (see def) indexed by symbols
+;; A namespace is basically a lookup table of vars (see def) indexed by symbols.
+;; At any given moment there is one and only one current namespace active.
+;; Booting up a clojure repl will make the 'user' namespace the current namespace.
+;; Request the current namespace:
+*ns*
+(str *ns*)
+
+;; Every def or defn will update the active namespace with a new symbol:
+;; Create a new namespace
+(ns a-new-namespace)
+*ns*
+;; Associate a value to a new symbol in the new namespace
+(def a-new-symbol "a new value")
+
+;; Switch to an existing namespace
+(ns stdlib.core)
+
+;; Use a-new-symbol in the user namespace by using the fully qualified ns:
+(str "Current Namespace: " *ns* " - " a-new-namespace/a-new-symbol)
+
+;; Using a namespace by loading it
+(require '[clojure.set :as s])
+(def s1 #{"foo" "bar" "baz"})
+(def s2 #{"foo" "bar" "ball"})
+(s/union s1 s2)
+(s/difference s1 s2)
+
+;; Discover everything in a namespace:
+(ns-map 'clojure.set)
+
+;;Remove a symbol from a namespace
+(ns-unmap *ns* 'some-symbol)
 
 
 ;;;;;;;;;;;;;
