@@ -283,6 +283,29 @@ a-name
 
 
 ;;;;;;;;;;;;;;
+;; GROUP-BY ;;
+;;;;;;;;;;;;;;
+
+
+;; Group by identity
+(group-by identity "abraacadaabra")
+
+;; Group by count
+(group-by count ["a" "as" "asd" "aa" "asdf" "qwer"])
+
+;; Group by predicate
+(group-by odd? (range 10))
+
+;; Group by 'primary key' ==
+;; Index a collection (see juxt for different approach)
+(group-by :a [{:a 1 :b "bla"} {:a 2 :b "blah"} {:a 1 :b "huh?"}])
+
+;; group by multiple criteria
+(def words ["The" "Clojure" "Standard" "Library" "is" "amazing"])
+(group-by (juxt first count) words)
+
+
+;;;;;;;;;;;;;;
 ;; IDENTITY ;;
 ;;;;;;;;;;;;;;
 
@@ -371,6 +394,7 @@ a-name
 (sort-by (juxt :a :b) [{:a 1 :b 3} {:a 1 :b 2} {:a 2 :b 1}])
 
 ;; Use it to create lookup maps
+;; (will overwrite items with the same 'primary key' (:id in this case)
 (into {} (map (juxt :id identity) [{:id 1 :name "fiets"} {:id 2 :name "bel"}]))
 
 (def seq-to-index
