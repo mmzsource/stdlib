@@ -553,6 +553,39 @@ a-name
 
 
 ;;;;;;;;;;;;;
+;; SOME-FN ;;
+;;;;;;;;;;;;;
+
+
+;; Useful when you'f use 'some', but have more than one predicate
+;; Compare:
+
+(or (some even?     [11 21 31])
+    (some #(< % 10) [11 21 31]))
+
+;; with
+
+((some-fn even? #(< % 10)) 11 13)
+
+;; in addition:
+;; former returns nil if there's nothing found, latter returns false.
+
+((some-fn :a :b :c :d) {:c 3 :d 4})
+
+;; Can be handy when you want to try multiple things before quiting:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (def parsers                             ;;
+;;   [parse-custom-command                  ;;
+;;    parse-basic-command                   ;;
+;;    parse-weird-command                   ;;
+;;    reject-command])                      ;;
+;;                                          ;;
+;; ((apply some-fn parsers) text-from-user) ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;
 ;; SORT-BY ;;
 ;;;;;;;;;;;;;
 
